@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+
+<script>
+
+    $(function() {
+        
+        $('#iniciarTeste').on('click', function(e) {
+            $.ajax({
+                url: '/api/iniciar',
+                dataType: 'json',
+                beforeSend: function() {
+                    $("#iniciarTeste").addClass('hide');
+                    $("#loading").removeClass('hide');
+                    $("#dadosConexao").addClass('hide');
+                    $("#resultados").addClass('hide');
+                },
+                success: function(data) {
+                    $("#iniciarTeste").removeClass('hide');
+                    $("#loading").addClass('hide');
+                    $("#dadosConexao").removeClass('hide');
+                    $("#resultados").removeClass('hide');
+                    let formatDate = dataAtualFormatada();
+
+                    let html = "";
+                    html += `<p><strong>Data:</strong> ${formatDate}</p>`;
+                    html += `<p><strong>IP:</strong> ${data.dadosConexao.ip}</p>`;
+                    html += `<p><strong>Prestadora:</strong> ${data.dadosConexao.isp}</p>`;
+                    $('#htmlDadosConexao').html(html);
+
+                    google.charts.setOnLoadCallback(drawChart(data));
+                }
+            })
+
+        })
+
+    })
+    
+    function dataAtualFormatada(){
+        const data = new Date();
+        let dia = data.getDate();
+        if (dia.toString().length == 1)
+        dia = "0"+dia;
+        let mes = data.getMonth()+1;
+        if (mes.toString().length == 1)
+        mes = "0"+mes;
+        let ano = data.getFullYear();
+        let hora = data.getHours();
+        let minutos = data.getMinutes();
+        let segundos = data.getSeconds();
+
+        let dataFormatada = `${dia}/${mes}/${ano} ${hora}:${minutos}:${segundos}` ;
+
+        return dataFormatada;
+    }
+
+    google.charts.load('current', {'packages':['line']});
+    //google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart(dados) {
+        // console.log(teste)
+        // var jsonData = $.ajax({
+        //     url: '/api/iniciar',
+        //     dataType: 'json',
+        //     async: false            
+        // }).responseText;
+
+        // let retorno = JSON.parse(jsonData);
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', '');
+        data.addColumn('number', 'Download');
+        data.addColumn('number', 'Upload');
+        data.addRows(dados.down);
+        var options = {
+            chart: {
+                title: 'Velocidade (TCP)',
+                subtitle: 'Em Mb/s'
+            }
+        };
+
+        var dataPing = new google.visualization.DataTable();
+        dataPing.addColumn('number', '');
+        dataPing.addColumn('number', 'Bidirecional');
+        dataPing.addRows(dados.ping);
+        var optionsPing = {
+            chart: {
+                title: 'Latência (PING)',
+                subtitle: 'Em MS'
+            }
+        };
+
+      var chart = new google.charts.Line(document.getElementById('linechart_material'));
+      chart.draw(data, google.charts.Line.convertOptions(options));
+
+      var chartPing = new google.charts.Line(document.getElementById('linechart_material_ping'));
+      chartPing.draw(dataPing, google.charts.Line.convertOptions(optionsPing));
+
+    }
+
+</script>
+
+<body style="padding-top:0px;" >
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h1>Teste de velocidade</h1>
+                <a id="iniciarTeste" class="btn btn-raised btn-lg btn-info" >Iniciar teste</a>
+            </div>
+        </div>
+
+        <div class="row hide" id="loading">
+            <div class="col-md-12">
+                <p>Liberando os testes, aguarde...</p>
+                <div class="progress progress-striped active" style="height:20px;">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row hide" id="dadosConexao">
+            <div class="col-md-12">
+                <h2>Dados de conexão</h2>
+            </div>
+            <div class="col-md-12">
+                <div class="well" id="htmlDadosConexao">
+                    
+
+                </div>
+            </div>
+        </div>
+        <div class="row hide" id="resultados">
+            <div class="col-md-12">
+                <h2>Resultados</h2>
+            </div>
+
+            <div class="col-md-6">
+                <div class="well">
+                    <div id="linechart_material" style="width: 100%; height: 200px"></div>
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="well">
+                    <div id="linechart_material_ping" style="width: 100%; height: 200px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
