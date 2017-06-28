@@ -10,61 +10,11 @@ app.get('/', function(req, res){
     res.render('pages/index'); 
 });
 
-app.get('/api/teste', function(req, res){
-    var itens = [
-       [1,  37.8, 80.8],
-        [2,  30.9, 69.5],
-        [3,  25.4,   57],
-        [4,  11.7, 18.8],
-        [5,  11.9, 17.6],
-        [6,   8.8, 13.6],
-        [7,   7.6, 12.3],
-        [8,  12.3, 29.2],
-        [9,  16.9, 42.9],
-        [10, 12.8, 30.9]
-      ];
-
-    var itens2 = [
-       [1,  37.8],
-        [2,  30.9],
-        [3,  25.4],
-        [4,  11.7],
-        [5,  37.8],
-        [6,  30.9],
-        [7,  25.4],
-        [8,  11.7],
-        [9,  37.8],
-        [10,  30.9],
-      ];
-    
-    let r = {};
-    r.down = itens;
-    r.ping = itens2;
-    res.json(r)
-});
-
-var calls = [];
-
-app.get('/api/iniciar', function(req, res){
-    
+app.get('/api/iniciar', function(req, res){    
 
     var itensTcp = [];
     var itensPing = [];
 
-    // [1,2].forEach(function(i){
-    //     calls.push(function(callback) {
-    //         test.on('data', data => {
-    //             console.log(data);
-    //             const item = [];
-    //             item.push(i);
-    //             item.push(data.speeds.download);
-    //             item.push(data.speeds.upload);
-    //             itensTcp.push(item);
-    //             //callback(null, i);
-    //         });
-    //     });
-        
-    // });
     let options = {maxTime: 5000, pingCount: 10};
     async.parallel({
         one: function(callback) {
@@ -212,5 +162,5 @@ app.get('/api/iniciar', function(req, res){
 
     
 });
-app.listen(8080, '192.168.20.22');
+app.listen(8080);
 console.log('8080 is the magic port');

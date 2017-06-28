@@ -58,17 +58,8 @@
     }
 
     google.charts.load('current', {'packages':['line']});
-    //google.charts.setOnLoadCallback(drawChart);
 
     function drawChart(dados) {
-        // console.log(teste)
-        // var jsonData = $.ajax({
-        //     url: '/api/iniciar',
-        //     dataType: 'json',
-        //     async: false            
-        // }).responseText;
-
-        // let retorno = JSON.parse(jsonData);
 
         var data = new google.visualization.DataTable();
         data.addColumn('number', '');
