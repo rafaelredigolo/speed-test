@@ -20,12 +20,8 @@ app.get('/api/iniciar', function(req, res){
         one: function(callback) {
             const test = speedTest(options);
             test.on('data', data => {
-                const tcp = [1, data.speeds.download, data.speeds.upload];
-                const ping = [1, data.server.ping];
-                const item = {};
+                const item = formatCallback(1, data);
                 const dadosConexao = data.client;
-                item.tcp = tcp;
-                item.ping = ping;
                 item.dadosConexao = dadosConexao;
                 callback(null, item);
             });
@@ -33,104 +29,67 @@ app.get('/api/iniciar', function(req, res){
         two: function(callback) {
             const test = speedTest(options);
             test.on('data', data => {
-                const tcp = [2, data.speeds.download, data.speeds.upload];
-                const ping = [2, data.server.ping];
-                const item = {};
-                item.tcp = tcp;
-                item.ping = ping;
+                const item = formatCallback(2, data);
                 callback(null, item);
             });
         },
         three: function(callback) {
             const test = speedTest(options);
             test.on('data', data => {
-                const tcp = [3, data.speeds.download, data.speeds.upload];
-                const ping = [3, data.server.ping];
-                const item = {};
-                item.tcp = tcp;
-                item.ping = ping;
+                const item = formatCallback(3, data);
                 callback(null, item);
             });
         },
         four: function(callback) {
             const test = speedTest(options);
             test.on('data', data => {
-                const tcp = [4, data.speeds.download, data.speeds.upload];
-                const ping = [4, data.server.ping];
-                const item = {};
-                item.tcp = tcp;
-                item.ping = ping;
+                const item = formatCallback(4, data);
                 callback(null, item);
             });
         },
         five: function(callback) {
             const test = speedTest(options);
             test.on('data', data => {
-                const tcp = [5, data.speeds.download, data.speeds.upload];
-                const ping = [5, data.server.ping];
-                const item = {};
-                item.tcp = tcp;
-                item.ping = ping;
+                const item = formatCallback(5, data);
                 callback(null, item);
             });
         },
         six: function(callback) {
             const test = speedTest(options);
             test.on('data', data => {
-                const tcp = [6, data.speeds.download, data.speeds.upload];
-                const ping = [6, data.server.ping];
-                const item = {};
-                item.tcp = tcp;
-                item.ping = ping;
+                const item = formatCallback(6, data);
                 callback(null, item);
             });
         },
         seven: function(callback) {
             const test = speedTest(options);
             test.on('data', data => {
-                const tcp = [7, data.speeds.download, data.speeds.upload];
-                const ping = [7, data.server.ping];
-                const item = {};
-                item.tcp = tcp;
-                item.ping = ping;
-                callback(null, item);;
+                const item = formatCallback(7, data);
+                callback(null, item);
             });
         },
         eight: function(callback) {
             const test = speedTest(options);
             test.on('data', data => {
-                const tcp = [8, data.speeds.download, data.speeds.upload];
-                const ping = [8, data.server.ping];
-                const item = {};
-                item.tcp = tcp;
-                item.ping = ping;
+                const item = formatCallback(8, data);
                 callback(null, item);
             });
         },
         nine: function(callback) {
             const test = speedTest(options);
             test.on('data', data => {
-                const tcp = [9, data.speeds.download, data.speeds.upload];
-                const ping = [9, data.server.ping];
-                const item = {};
-                item.tcp = tcp;
-                item.ping = ping;
+                const item = formatCallback(9, data);
                 callback(null, item);
             });
         },
         ten: function(callback) {
             const test = speedTest(options);
             test.on('data', data => {
-                const tcp = [10, data.speeds.download, data.speeds.upload];
-                const ping = [10, data.server.ping];
-                const item = {};
-                item.tcp = tcp;
-                item.ping = ping;
+                const item = formatCallback(10, data);
                 callback(null, item);
             });
         }
-    }, function(err, results) {
-        // results is now equals to: {one: 1, two: 2}
+    }, function(err, results) {        
         itensTcp.push(results.one.tcp);
         itensTcp.push(results.two.tcp);
         itensTcp.push(results.three.tcp);
@@ -164,3 +123,12 @@ app.get('/api/iniciar', function(req, res){
 });
 app.listen(8080);
 console.log('8080 is the magic port');
+
+function formatCallback(i, data) {
+    const tcp = [i, data.speeds.download, data.speeds.upload];
+    const ping = [i, data.server.ping];
+    const item = {};
+    item.tcp = tcp;
+    item.ping = ping;
+    return item;
+}
